@@ -1,0 +1,11 @@
+{
+	"scripts": {
+		"build": "browserify src/virtualpixi.js -o dist/virtualpixi.js",
+		"watch": "watchify examples/main/index.js -o examples/main/build.js -v",
+		"watch-tweens": "watchify examples/tweens/index.js -o examples/tweens/build.js -v"
+	},
+  "devDependencies": {
+    "browserify": "^13.0.0",
+		"watchify": "^3.7.0"
+  }
+}

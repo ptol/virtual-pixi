@@ -1,0 +1,35 @@
+{
+	"name": "virtual-pixi",
+	"description": "A virtual dom library for pixi.js that uses snabbdom and tween.js",
+	"main": "dist/virtualpixi.js",
+	"moduleType": [
+		"globals",
+		"es6"
+	],
+	"license": "MIT",
+	"ignore": [
+		"**/.*",
+		"*",
+		"node_modules",
+		"src",
+		"examples",
+		"bower_components"
+	],
+	"keywords": [
+		"pixi",
+		"snabbdom",
+		"tween"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/ptol/virtual-pixi.git"
+	},
+	"homepage": "https://github.com/ptol/virtual-pixi",
+	"dependencies": {
+		"snabbdom": "https://github.com/paldepind/snabbdom.git#946e34cf75b09bc1b18f958533ba9679947b1889",
+		"pixi.js": "3.0.10",
+		"tween.js": "https://github.com/tweenjs/tween.js.git#16.3.4"
+	},
+	"devDependencies": {
+	}
+}
