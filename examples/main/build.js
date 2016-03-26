@@ -520,7 +520,7 @@ function createTween(elm, td){
   elm.vptweens = [];
   var first = true;
   for(var key in props){
-    var tween = createKeyTween(elm, props[key], td.duration, key);
+    var tween = createKeyTween(elm, props[key], td, key);
     elm.vptweens.push(tween);
     if(first){
       function onComplete(){
@@ -535,9 +535,12 @@ function createTween(elm, td){
   elm.vptweens.forEach(x => x.start());
 }
 
-function createKeyTween(elm, obj, duration, key){
+function createKeyTween(elm, obj, td, key){
   var tween = new TWEEN.Tween(obj.from);
-  tween.to(obj.to, duration);
+  tween.to(obj.to, td.duration);
+  if(td.easing){
+    tween.easing(td.easing);
+  }
   tween.onUpdate(function(){
     updateProps(key == elmKey ? elm : elm[key], this);
   });
@@ -545,7 +548,7 @@ function createKeyTween(elm, obj, duration, key){
 }
 
 function isObject(obj) {
-  return obj === Object(obj);
+  return typeof obj === "object";
 }
 
 function getPropsToTween(tween){
@@ -746,6 +749,14 @@ function patchPixi(){
       var bounds = this.getLocalBounds();
       this.pivot.x = bounds.width*v.x;
       this.pivot.y = bounds.height*v.y;
+    }});
+
+  Object.defineProperty(px.Sprite.prototype, "pivotAnchor", {
+    get: function() {
+      return this.anchor;
+    },
+    set: function(v){
+      this.anchor = v;
     }});
 
 }

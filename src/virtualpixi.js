@@ -20,6 +20,14 @@ function patchPixi(){
       this.pivot.y = bounds.height*v.y;
     }});
 
+  Object.defineProperty(px.Sprite.prototype, "pivotAnchor", {
+    get: function() {
+      return this.anchor;
+    },
+    set: function(v){
+      this.anchor = v;
+    }});
+
 }
 
 patchPixi();
