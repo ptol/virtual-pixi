@@ -55,7 +55,17 @@ function eventRemove(){
     h("text", {props : {text: "No Clicks"}} ));
 }
 
+
+function keyboard(){
+  example(
+    h("text", {props : {text: "Space"}, keyboard: {"space": {callback: () => log("space"), action: "keydown"}}} ),
+    h("text", {props : {text: "Space"}, keyboard: {"space": {callback: () => log("space"), action: "keydown"}}} ));
+}
+
+
 propsUpdate();
 complexPropsUpdate();
 eventChange();
 eventRemove();
+
+// keyboard();

@@ -389,6 +389,31 @@ function updateEventListeners(oldVnode, vnode) {
 module.exports = {create: updateEventListeners, update: updateEventListeners};
 
 },{}],7:[function(require,module,exports){
+var mt = Mousetrap;
+
+function updateKeys(oldVnode, vnode) {
+  var oldKeyboard = oldVnode.data.keyboard || {};
+  var keyboard = vnode.data.keyboard || {};
+  var keys = Object.keys(oldKeyboard).concat(Object.keys(keyboard));
+  keys.forEach(key => {
+    var isOld = oldKeyboard[key];
+    var isNew = keyboard[key];
+    if(!isOld || !isNew){
+      if(isOld){
+        mt.unbind(key);
+      }
+      if(isNew){
+        mt.bind(key, function(event){
+          isNew.callback();
+        }, isNew.action);
+      }
+    }
+  });
+}
+
+module.exports = {create: updateKeys, update: updateKeys};
+
+},{}],8:[function(require,module,exports){
 function updateProps(oldVnode, vnode) {
   var elm = vnode.elm;
   var oldProps = oldVnode.data.props || {};
@@ -409,7 +434,7 @@ function updateProps(oldVnode, vnode) {
 
 module.exports = {create: updateProps, update: updateProps};
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 var elmKey = "elm";
 function stopTweens(elm){
   if(elm.vptweens){
@@ -422,7 +447,7 @@ function createTween(elm, td){
   elm.vptweens = [];
   var first = true;
   for(var key in props){
-    var tween = createKeyTween(elm, props[key], td.duration, key);
+    var tween = createKeyTween(elm, props[key], td, key);
     elm.vptweens.push(tween);
     if(first){
       function onComplete(){
@@ -437,9 +462,12 @@ function createTween(elm, td){
   elm.vptweens.forEach(x => x.start());
 }
 
-function createKeyTween(elm, obj, duration, key){
+function createKeyTween(elm, obj, td, key){
   var tween = new TWEEN.Tween(obj.from);
-  tween.to(obj.to, duration);
+  tween.to(obj.to, td.duration);
+  if(td.easing){
+    tween.easing(td.easing);
+  }
   tween.onUpdate(function(){
     updateProps(key == elmKey ? elm : elm[key], this);
   });
@@ -447,7 +475,7 @@ function createKeyTween(elm, obj, duration, key){
 }
 
 function isObject(obj) {
-  return obj === Object(obj);
+  return typeof obj === "object";
 }
 
 function getPropsToTween(tween){
@@ -563,7 +591,7 @@ function create(empty, vnode) {
 
 module.exports = {create: create, update: update, remove: remove};
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var px = PIXI;
 var nodeTypes = {};
 nodeTypes.text = () => new px.Text("", {font: "14px Verdana", fill: "silver"});
@@ -626,19 +654,30 @@ module.exports = {
   nodeTypes: nodeTypes
 };
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 (function (global){
 var px = PIXI;
 var snabbdom = require('../bower_components/snabbdom/snabbdom');
 var h = require('../bower_components/snabbdom/h');
 var api = require('./pixidomapi');
-
+var emptyPoint = new px.Point(0,0);
 function patchPixi(){
   Object.defineProperty(px.Sprite.prototype, "src", {
     get: function() { return this.baseTexture.imageUrl;},
     set: function(v){
       this.texture = v ? px.Texture.fromImage(v) : px.Texture.EMPTY;
     }});
+
+  Object.defineProperty(px.Container.prototype, "pivotAnchor", {
+    get: function() {
+      return emptyPoint;
+    },
+    set: function(v){
+      var bounds = this.getLocalBounds();
+      this.pivot.x = bounds.width*v.x;
+      this.pivot.y = bounds.height*v.y;
+    }});
+
 }
 
 patchPixi();
@@ -647,7 +686,8 @@ patchPixi();
 var patch = snabbdom.init([
   require('./modules/props'),
   require('./modules/events'),
-  require('./modules/tweens')
+  require('./modules/tweens'),
+  require('./modules/keyboard')
 ], api);
 
 global.virtualPixi = {h: h, patch: patch, api: api};
@@ -656,4 +696,4 @@ exports.api = api;
 exports.patch = patch;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../bower_components/snabbdom/h":1,"../bower_components/snabbdom/snabbdom":4,"./modules/events":6,"./modules/props":7,"./modules/tweens":8,"./pixidomapi":9}]},{},[10]);
+},{"../bower_components/snabbdom/h":1,"../bower_components/snabbdom/snabbdom":4,"./modules/events":6,"./modules/keyboard":7,"./modules/props":8,"./modules/tweens":9,"./pixidomapi":10}]},{},[11]);
