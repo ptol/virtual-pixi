@@ -4,7 +4,11 @@ function updateProps(oldVnode, vnode) {
   var props = vnode.data.props || {};
   for (key in oldProps) {
     if (!props[key]) {
-      delete elm[key];
+			if(typeof oldProps[key] == "number"){
+				elm[key] = 0;
+			}else{
+				delete elm[key];
+			}
     }
   }
   for (var key in props) {

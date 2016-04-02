@@ -12,20 +12,19 @@ function patchPixi(){
 
   Object.defineProperty(px.Container.prototype, "pivotAnchor", {
     get: function() {
+      if(this.anchor){
+        return this.anchor;
+      }
       return emptyPoint;
     },
     set: function(v){
-      var bounds = this.getLocalBounds();
-      this.pivot.x = bounds.width*v.x;
-      this.pivot.y = bounds.height*v.y;
-    }});
-
-  Object.defineProperty(px.Sprite.prototype, "pivotAnchor", {
-    get: function() {
-      return this.anchor;
-    },
-    set: function(v){
-      this.anchor = v;
+      if(this.anchor){
+        this.anchor = v;
+      }else{
+        var bounds = this.getLocalBounds();
+        this.pivot.x = bounds.width*v.x;
+        this.pivot.y = bounds.height*v.y;
+      }
     }});
 
 }

@@ -31,6 +31,12 @@ function createKeyTween(elm, obj, td, key){
   if(td.easing){
     tween.easing(td.easing);
   }
+  if(td.repeat){
+    tween.repeat(td.repeat);
+  }
+  if(td.yoyo){
+    tween.yoyo(td.yoyo);
+  }
   tween.onUpdate(function(){
     updateProps(key == elmKey ? elm : elm[key], this);
   });
