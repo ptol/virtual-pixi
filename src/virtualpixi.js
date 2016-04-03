@@ -7,7 +7,7 @@ function patchPixi(){
   Object.defineProperty(px.Sprite.prototype, "src", {
     get: function() { return this.baseTexture.imageUrl;},
     set: function(v){
-      this.texture = v ? px.Texture.fromImage(v) : px.Texture.EMPTY;
+      this.texture = v ? px.utils.TextureCache[v] : px.Texture.EMPTY;
     }});
 
   Object.defineProperty(px.Container.prototype, "pivotAnchor", {

@@ -728,7 +728,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
             return this.baseTexture.imageUrl;
           },
           set: function set(v) {
-            this.texture = v ? px.Texture.fromImage(v) : px.Texture.EMPTY;
+            this.texture = v ? px.utils.TextureCache[v] : px.Texture.EMPTY;
           } });
 
         Object.defineProperty(px.Container.prototype, "pivotAnchor", {
