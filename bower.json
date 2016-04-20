@@ -10,6 +10,7 @@
 	"ignore": [
 		"**/.*",
 		"node_modules",
+		"lib",
 		"src",
 		"examples",
 		"bower_components"
