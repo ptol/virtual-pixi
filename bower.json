@@ -26,11 +26,11 @@
 	},
 	"homepage": "https://github.com/ptol/virtual-pixi",
 	"dependencies": {
-		"snabbdom": "https://github.com/paldepind/snabbdom.git#946e34cf75b09bc1b18f958533ba9679947b1889",
 		"pixi.js": "3.0.10",
 		"tween.js": "https://github.com/tweenjs/tween.js.git#16.3.4",
 		"mousetrap": "https://github.com/ccampbell/mousetrap.git"
 	},
 	"devDependencies": {
+		"snabbdom": "https://github.com/paldepind/snabbdom.git#946e34cf75b09bc1b18f958533ba9679947b1889"
 	}
 }
