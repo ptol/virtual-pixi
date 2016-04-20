@@ -1,6 +1,7 @@
 var px = PIXI;
 var snabbdom = require('../bower_components/snabbdom/snabbdom');
 var h = require('../bower_components/snabbdom/h');
+var thunk = require('./thunk');
 var api = require('./pixidomapi');
 var emptyPoint = new px.Point(0,0);
 function patchPixi(){
@@ -39,7 +40,8 @@ var patch = snabbdom.init([
   require('./modules/keyboard')
 ], api);
 
-global.virtualPixi = {h: h, patch: patch, api: api};
+global.virtualPixi = {h: h, patch: patch, api: api, thunk: thunk};
 exports.h = h;
+exports.thunk = thunk;
 exports.api = api;
 exports.patch = patch;

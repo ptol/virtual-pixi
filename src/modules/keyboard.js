@@ -14,6 +14,7 @@ function updateKeys(oldVnode, vnode) {
       if(isNew){
         mt.bind(key, function(event){
           isNew.callback();
+					return false;
         }, isNew.action);
       }
     }

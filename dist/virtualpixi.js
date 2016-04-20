@@ -453,6 +453,7 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
           if (isNew) {
             mt.bind(key, function (event) {
               isNew.callback();
+              return false;
             }, isNew.action);
           }
         }
@@ -716,10 +717,39 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
       nodeTypes: nodeTypes
     };
   }, {}], 11: [function (require, module, exports) {
+    var h = require('../bower_components/snabbdom/h');
+    function init(thunk) {
+      var cur = thunk.data;
+      cur.vnode = cur.fn.call(undefined, cur.arg);
+    }
+
+    function prepatch(oldThunk, thunk) {
+      var old = oldThunk.data;
+      var cur = thunk.data;
+      var oldArg = old.arg;
+      var arg = cur.arg;
+      cur.vnode = old.vnode;
+      var isEqual = cur.compare ? cur.compare(arg, oldArg) : arg === oldArg;
+      if (!isEqual) {
+        cur.vnode = cur.fn.call(undefined, arg);
+        return;
+      }
+    }
+
+    module.exports = function (name, fn, arg, compare) {
+      return h('thunk-' + name, {
+        hook: { init: init, prepatch: prepatch },
+        fn: fn,
+        arg: arg,
+        compare: compare
+      });
+    };
+  }, { "../bower_components/snabbdom/h": 1 }], 12: [function (require, module, exports) {
     (function (global) {
       var px = PIXI;
       var snabbdom = require('../bower_components/snabbdom/snabbdom');
       var h = require('../bower_components/snabbdom/h');
+      var thunk = require('./thunk');
       var api = require('./pixidomapi');
       var emptyPoint = new px.Point(0, 0);
       function patchPixi() {
@@ -753,9 +783,10 @@ function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.const
 
       var patch = snabbdom.init([require('./modules/props'), require('./modules/events'), require('./modules/tweens'), require('./modules/keyboard')], api);
 
-      global.virtualPixi = { h: h, patch: patch, api: api };
+      global.virtualPixi = { h: h, patch: patch, api: api, thunk: thunk };
       exports.h = h;
+      exports.thunk = thunk;
       exports.api = api;
       exports.patch = patch;
     }).call(this, typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {});
-  }, { "../bower_components/snabbdom/h": 1, "../bower_components/snabbdom/snabbdom": 4, "./modules/events": 6, "./modules/keyboard": 7, "./modules/props": 8, "./modules/tweens": 9, "./pixidomapi": 10 }] }, {}, [11]);
+  }, { "../bower_components/snabbdom/h": 1, "../bower_components/snabbdom/snabbdom": 4, "./modules/events": 6, "./modules/keyboard": 7, "./modules/props": 8, "./modules/tweens": 9, "./pixidomapi": 10, "./thunk": 11 }] }, {}, [12]);
